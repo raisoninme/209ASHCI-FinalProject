@@ -1,38 +1,45 @@
-*developed @unity @meta quest2*
+*developed @unity @meta quest3*
 
 # CookSmart AR
 
-## technic selection
+## Technic selection
 
 ### Manupulation
 
-use hands/controller/voice command
+use hands/voice command
 
 #### Voice commands
 
-voice command by the keywords like "next","return" and so on.
+voice command by the keywords like "next","back" and so on.
 
-powed by Wit.ai. package: Voice sdk
+powered by @Vosk. **(Offline)**
 
-  | function      | utterances             |
-  | ------------- | ---------------------- |
-  | previous step | back, return, previous |
-  | next step     | next                   |
-  | quit the app  | quit, leave the app    |
-  | start timer   | start timer            |
-  | pause timer   | pause timer            |
-  | stop timer    | stop timer             |
+| function                            | utterances                        |
+| ----------------------------------- | --------------------------------- |
+| next step                           | next                              |
+| go to main menu                     | main menu                         |
+| new timer                           | timer                             |
+| back to previous step               | back                              |
+| highlight the cookers with its name | [cookers name shown on the panel] |
 
-*the keyward implementation is hard-coded* 
+### Voice guide
 
-### robot assistant
+powered by @OpenAI. **(Online)**
 
-package: 
+| timing                                | guide words                                                  |
+| ------------------------------------- | ------------------------------------------------------------ |
+| open the app                          | "Hello! Welcome to CookSmart. I am your assistant. Instead of using your hands, you can give me instructions verbally! Sounds cool, right? Let's get started! Please select the cookware available to you right now" |
+| at cookware panel                     | "Please select the cookware available to you right now"      |
+| at recipe panel                       | "Please select the recipe"                                   |
+| going through each step on the recipe | [read loud each step's text]                                 |
 
-## Database
+*The words of the steps in the recipe are generated during runtime, so please keep your headset connected to the Internet.*
 
-| dish name           | ingredients                                                  | recipe                                                       |
-| ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Quick Beef Stir-Fry | 2 tablespoons vegetable oil 1 pound beef sirloin, cut into 2-inch strips 1 ½ cups fresh broccoli florets 1 red bell pepper, cut into matchsticks 2 carrots, thinly sliced 1 green onion, chopped 1 teaspoon minced garlic 2 tablespoons soy sauce 2 tablespoons sesame seeds, toasted | 1.Heat vegetable oil in a large wok or skillet over medium-high heat; cook and stir beef until browned, 3 to 4 minutes.<br />2.Move beef to the side of the wok and add broccoli, bell pepper, carrots, green onion, and garlic to the center of the wok. Cook and stir vegetables for 2 minutes.<br />3.Stir beef into vegetables and season with soy sauce and sesame seeds. Continue to cook and stir until vegetables are tender, about 2 more minutes. |
-| .......             | ......                                                       | .......                                                      |
+## Recipe
 
+| dish                | steps                                                        |
+| ------------------- | ------------------------------------------------------------ |
+| Quick Beef Stir-Fry | 1.Heat vegetable oil in a large wok or skillet over medium-high heat; cook and stir beef until browned, 3 to 4 minutes.<br />2.Move beef to the side of the wok and add broccoli, bell pepper, carrots, green onion, and garlic to the center of the wok. Cook and stir vegetables for 2 minutes.<br />3.Stir beef into vegetables and season with soy sauce and sesame seeds. Continue to cook and stir until vegetables are tender, about 2 more minutes. |
+| .......             | .......                                                      |
+
+*This project is for demo purposes, so recipe and steps are hard-coded in the project code. For commercial use, please utilize a database and complete more functions.*

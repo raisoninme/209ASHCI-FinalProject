@@ -16,10 +16,6 @@ namespace Recognissimo.Samples.VoiceControlExample
     [SerializeField]
     private VoiceControl voiceControl;
     public Command[] commands;
-    
-    
-
-
 
     private void Start()
     {

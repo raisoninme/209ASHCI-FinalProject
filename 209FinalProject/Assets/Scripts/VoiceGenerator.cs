@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
+using System.Text;
 
 public class VoiceGenerator : MonoBehaviour
 {
@@ -10,21 +11,15 @@ public class VoiceGenerator : MonoBehaviour
     public AudioClip[] clips;
     public AudioSource audios;
     public string Apiurl;
-    public int VoiceIndex;
-    public float interval;
-    public string test;
+    public string Apikey;
+
     void Start()
     {
         
     }
-
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Generate(test);
-        }   
+
     }
     public void Generate(string content)
     {
@@ -41,13 +36,11 @@ public class VoiceGenerator : MonoBehaviour
         clips = new AudioClip[texts.Length];
         for (int i = 0; i < texts.Length; i++)
         {
-            UnityEngine.Debug.Log("生成開始 " + i);
             if (texts[i].Length > 0) StartCoroutine(CreateVoiceClipFromAPI(texts[i], i));
         }
         for (int i = 0; i < texts.Length; i++)
         {
             yield return new WaitUntil(() => clips[i] != null || texts[i].Length == 0);
-            UnityEngine.Debug.Log("生成完成");
             audios.clip = clips[i];
             audios.Play();
             if (texts[i].Length > 0) yield return new WaitForSeconds(audios.clip.length);
@@ -55,25 +48,36 @@ public class VoiceGenerator : MonoBehaviour
         yield return new WaitForSeconds(2f);
         clips = null;
     }
+    
+
     public IEnumerator CreateVoiceClipFromAPI(string text, int index)
     {
-        string url = Apiurl + "/voice/vits";
-        text = text.Replace(" ", "");
-        url += "?text=" + text + "&id=" + VoiceIndex + "&lang=" + "en" + "&format=wav";
-        Debug.Log(url);
-        using (var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.WAV))
+        // Note: 'model' and 'voice' are parameters specific to OpenAI's TTS API
+        string requestData = $"{{\"model\":\"tts-1\",\"input\":\"{text}\",\"voice\":\"alloy\"}}";
+
+        using (var request = new UnityWebRequest(Apiurl, "POST"))
         {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(requestData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            // request.downloadHandler = new DownloadHandlerBuffer();
+            request.downloadHandler = new DownloadHandlerAudioClip("MyAudioClip", AudioType.MPEG);
+            request.SetRequestHeader("Authorization", "Bearer " + Apikey);
+            request.SetRequestHeader("Content-Type", "application/json");
             yield return request.SendWebRequest();
+
             if (request.responseCode == 200)
             {
+                // Assuming the response contains the audio data, you need to handle it accordingly
                 AudioClip audioclip = DownloadHandlerAudioClip.GetContent(request);
-                UnityEngine.Debug.Log("獲取音頻");
+                Debug.Log("Received audio");
                 clips[index] = audioclip;
             }
             else
             {
-                UnityEngine.Debug.Log(request.error);
+                Debug.Log(request.error);
             }
         }
     }
+
+
 }

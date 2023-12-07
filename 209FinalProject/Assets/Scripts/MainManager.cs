@@ -11,7 +11,7 @@ public class MainManager : MonoBehaviour
     public int curStage, curStep;
     int preStage = -1,preStep = -1;
     public int curRecipe;
-    public AudioClip main,recipe;
+    public AudioClip opening,recipe,main;
     public GameObject control;
     public GameObject[] Stages;
     public GameObject back_Btn,next_Btn;
@@ -22,9 +22,10 @@ public class MainManager : MonoBehaviour
     public VoiceGenerator voice;
     public Toggle[] toggles;
     public GameObject RecipesRoot, CookersRoot;
+    private bool is_starting = false;
     void Start()
     {
-        
+        is_starting = true;
     }
 
     // Update is called once per frame
@@ -78,7 +79,12 @@ public class MainManager : MonoBehaviour
             if(curStage == 0)
             {
                 back_Btn.SetActive(false);
-                voice.audios.PlayOneShot(main);
+                if(is_starting){
+                    is_starting = false;
+                    voice.audios.PlayOneShot(opening);
+                }else{
+                    voice.audios.PlayOneShot(main);
+                }            
             }
             else if(curStage == 1)
             {
